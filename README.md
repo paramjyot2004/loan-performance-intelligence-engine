@@ -1,99 +1,88 @@
-# Loan Performance Intelligence Engine — Prototype
+# LoanLens — Loan Performance Intelligence Engine
 
-Prototype submission for Intain Campus FinTech Challenge 2026 (AI Track).
+> **AI-powered loan performance intelligence for risk prediction, loan-state monitoring, anomaly detection, scenario simulation, explainability, and grounded LLM-assisted review.**
 
-**Live Demo:** https://loan-intelligence-engine.streamlit.app/
+**Intain FinTech Challenge 2026 — AI Track | Top 20 Finalist**
 
-## What this project does
+🔗 **Live Demo:** https://loan-intelligence-engine.streamlit.app/  
+🔗 **GitHub:** https://github.com/paramjyot2004/loan-performance-intelligence-engine
 
-Given loan-level monthly performance data, this project:
+---
 
-1. Profiles and cleans the data (finds missing values, invalid records)
-2. Trains a machine learning model to predict loan default risk
-3. Builds a monthly state-transition model (does a loan move to "default", "current", etc. next month)
-4. Detects anomalous/suspicious loan records
-5. Runs "what-if" scenario simulations (adverse credit conditions, high prepayment)
-6. Explains what drives each prediction
-7. Uses an LLM (Google Gemini, free tier) to turn model output into plain-English reviewer notes — with full prompt logging
-8. Includes a live Streamlit demo app (`app.py`) for interactive exploration
+## Overview
 
-## Folder structure
+**LoanLens** is an AI-driven Loan Performance Intelligence Engine that analyzes loan-level data and provides a structured view of loan risk and performance.
 
-```
-data/
-  sim_train.csv                               -> Training data, has answer/target columns
-  sim_test.csv                                -> Test data, target columns hidden (same loans excluded from train)
-code/
-  01_data_profiling_and_prediction_model.py   -> Tasks 1, 2, 4, 5, 6 + generates submission.csv
-  02_transition_model.py                      -> Task 3 (monthly transition model)
-  03_llm_reviewer_copilot.py                  -> Task 7 (LLM reviewer notes)
-  04_stress_test.py                           -> Advanced feature: synthetic-data stress testing (proves the pipeline survives extreme/broken data)
-  05_bias_fairness_analysis.py                -> Advanced feature: bias/fairness analysis (checks predicted risk gaps across state, occupancy type, credit band)
-reports/
-  01_results.md                               -> Auto-generated: full output of script 01 (profiling, model metrics, feature importance, anomalies, scenarios)
-  02_results.md                               -> Auto-generated: full output of script 02 (transition matrix, baseline comparison)
-  03_results.md                               -> Auto-generated: full output of script 03 (LLM-generated reviewer notes, rejected-output example)
-  04_stress_test_results.md                   -> Auto-generated: full output of script 04 (stress test against deliberately broken data)
-  05_bias_fairness_results.md                 -> Auto-generated: full output of script 05 (predicted risk by state, occupancy type, credit band)
-  model_card.md                               -> Model objective, data, features, metrics, limitations, known failure modes
-  data_explainability_scenario_reports.md     -> Data quality findings, explainability (top drivers, error analysis), and scenario simulation results
-  ai_development_log.md                       -> How AI tools were used during development: prompts used, accepted/rejected AI output, human review process, lessons learned
-outputs/                                      -> Generated automatically when you run the scripts
-  submission.csv
-  transition_matrix.csv
-  llm_prompt_log.csv
-app.py                                        -> Live interactive Streamlit demo (predictions, explainability, anomalies, AI reviewer notes)
-requirements.txt                              -> Python packages needed
-.env.example                                  -> Template for your API key (copy to .env)
-```
+The system combines machine learning, time-based loan analysis, anomaly detection, scenario simulation, explainability, and a grounded Gemini reviewer layer.
 
-## How to run this (from a terminal)
+### Core Principle
 
-**1. Install the required packages:**
+> **ML makes the prediction. Gemini explains the prediction. A human makes the final decision.**
 
-```
-pip install -r requirements.txt
-```
+Gemini is **not** used to predict loan default. The ML pipeline first generates structured evidence such as predicted risk, confidence, feature drivers, and anomaly status. Gemini then converts this evidence into a concise reviewer-friendly explanation.
 
-**2. Set up your API key (only needed for script 03 and the AI Reviewer tab in app.py):**
-Copy `.env.example` to a new file named `.env`, and paste your free Gemini API key into it:
+---
 
-```
-cp .env.example .env
-```
+## Key Features
 
-Then open `.env` and replace `your_key_here` with your real key (get one free at aistudio.google.com).
+| Area | Capabilities |
+|---|---|
+| **Data Intelligence** | Data profiling, cleaning, missing-value handling, and feature engineering |
+| **Risk Prediction** | Random Forest default-risk prediction with time-aware validation |
+| **Loan Dynamics** | Monthly loan-state transition analysis |
+| **Monitoring** | Isolation Forest anomaly detection |
+| **What-if Analysis** | Adverse-credit and high-prepayment scenario simulation |
+| **Explainability** | Feature importance and loan-level risk drivers |
+| **GenAI Reviewer** | Grounded Gemini explanations based on actual ML outputs |
+| **Responsible AI** | Stress testing, fairness screening, prompt logging, and human-in-the-loop review |
 
-**3. Run each script in order:**
+---
 
-```
-python3 code/01_data_profiling_and_prediction_model.py
-python3 code/02_transition_model.py
-python3 code/03_llm_reviewer_copilot.py
-python3 code/04_stress_test.py
-python3 code/05_bias_fairness_analysis.py
-```
+## System Architecture
 
-Each script prints its results directly in the terminal, **and also writes the same results into a matching report file** in `reports/` (`01_results.md`, `02_results.md`, `03_results.md`) — so results can be reviewed later without re-running anything.
-
-**4. Run the live demo app (optional):**
-
-```
-streamlit run app.py
-```
-
-## Advanced Features (beyond minimum requirements)
-
-- **Synthetic-data stress testing** (`code/04_stress_test.py`) — deliberately injects extreme/broken data (impossible values, unseen categories, corrupted dates, duplicates) into the pipeline to prove it handles messy real-world conditions, not just clean practice data.
-- **Bias/fairness analysis** (`code/05_bias_fairness_analysis.py`) — checks whether predicted default risk varies meaningfully across state, occupancy type, and credit score band, flagging any large, unexplained gaps for human review.
-
-## What's in each report file
-
-- **`01_results.md` / `02_results.md` / `03_results.md`** — raw, auto-generated output from each script run: exact numbers, tables, and metrics produced. Regenerated every time the scripts are run.
-- **`model_card.md`** — the model's objective, the data and features it uses, its type and validation method, current metrics, known limitations, and failure modes.
-- **`data_explainability_scenario_reports.md`** — three write-ups in one file: data quality findings (missing values, outliers, anomalies), explainability (top prediction drivers, a local example, error analysis), and scenario simulation results with interpretation.
-- **`ai_development_log.md`** — which AI tools were used and how, representative prompts, examples of accepted vs. rejected AI output, the human review process, and lessons learned during development.
-
-## Data
-
-`data/sim_train.csv` and `data/sim_test.csv` are a practice train/test split (built from synthetic data) simulating the real organizer file structure — the test file's future-outcome columns are removed, and it contains loans never seen during training, matching how the official `loan_monthly_performance_train.csv` / `loan_monthly_performance_test.csv` will work. Once the official files are released, only the `TRAIN_FILE` / `TEST_FILE` paths at the top of `code/01_data_profiling_and_prediction_model.py` need to change — no other code changes required.
+```text
+                         ┌──────────────────┐
+                         │   Loan Dataset   │
+                         └────────┬─────────┘
+                                  │
+                                  ▼
+                    ┌──────────────────────────┐
+                    │ Profiling & Data Cleaning│
+                    └────────────┬─────────────┘
+                                 │
+                                 ▼
+                    ┌──────────────────────────┐
+                    │ Feature Engineering      │
+                    │ 19 Model Features        │
+                    └────────────┬─────────────┘
+                                 │
+             ┌───────────────────┼───────────────────┐
+             │                   │                   │
+             ▼                   ▼                   ▼
+      ┌──────────────┐   ┌──────────────┐   ┌────────────────┐
+      │ Default Risk │   │  Transition  │   │    Anomaly     │
+      │ Random Forest│   │    Model     │   │ IsolationForest│
+      └──────┬───────┘   └──────┬───────┘   └───────┬────────┘
+             │                   │                   │
+             └───────────────────┼───────────────────┘
+                                 │
+                                 ▼
+                    ┌──────────────────────────┐
+                    │ Explainability &         │
+                    │ Scenario Simulation      │
+                    └────────────┬─────────────┘
+                                 │
+                                 ▼
+                    ┌──────────────────────────┐
+                    │ Structured Model Evidence│
+                    └────────────┬─────────────┘
+                                 │
+                                 ▼
+                    ┌──────────────────────────┐
+                    │ Gemini Grounded Reviewer │
+                    └────────────┬─────────────┘
+                                 │
+                                 ▼
+                    ┌──────────────────────────┐
+                    │     Human Reviewer       │
+                    └──────────────────────────┘

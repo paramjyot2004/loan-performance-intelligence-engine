@@ -110,11 +110,11 @@ Gemini is **not** used to predict loan default. The ML pipeline first generates 
 
 ### Dashboard
 
-![LoanLens Dashboard](assets/dashboard.png)
+![LoanLens Dashboard](asassets/dashboard.png)
 
 ### Explainability
 
-![LoanLens Explainability](assets/explainability.png)
+![LoanLens Explainability](asassets/explainability.png)
 
 ---
 

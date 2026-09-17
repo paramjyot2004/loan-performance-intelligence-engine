@@ -86,3 +86,45 @@ Gemini is **not** used to predict loan default. The ML pipeline first generates 
                     ┌──────────────────────────┐
                     │     Human Reviewer       │
                     └──────────────────────────┘
+```
+
+---
+
+## Key Results
+
+| Metric | Result |
+|---|---:|
+| Records processed | 16,889 |
+| Features used | 19 |
+| ROC-AUC | 0.600 |
+| Anomalies detected | 507 (~3%) |
+| Transition accuracy | 90.9% |
+| Naive baseline | 89.5% |
+| Test predictions | 4,246 |
+
+> **Prototype results on synthetic practice data.**
+
+---
+
+## Screenshots
+
+### Dashboard
+
+![LoanLens Dashboard](assets/dashboard.png)
+
+### Explainability
+
+![LoanLens Explainability](assets/explainability.png)
+
+---
+
+## Limitations
+
+- Evaluated on synthetic practice data.
+- ROC-AUC of 0.600 is not production-ready performance.
+- Feature importance indicates model contribution, not causation.
+- Anomaly detection identifies unusual records, not fraud.
+- Fairness analysis is an initial screening, not a formal audit.
+- Gemini explains model outputs and does not make lending decisions.
+
+---

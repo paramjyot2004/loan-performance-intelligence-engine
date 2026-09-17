@@ -128,3 +128,10 @@ Gemini is **not** used to predict loan default. The ML pipeline first generates 
 - Gemini explains model outputs and does not make lending decisions.
 
 ---
+## Run Locally
+
+```bash
+git clone https://github.com/paramjyot2004/loan-performance-intelligence-engine.git
+cd loan-performance-intelligence-engine
+pip install -r requirements.txt
+streamlit run app.py
